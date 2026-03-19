@@ -29,6 +29,10 @@ public class Software extends JFrame{
     private JPanel espacioImagenOriginal;
     private JPanel espacioImagenResultado;
 
+    //Auxiliares para manejar otros formatos de imagen a color
+    private double[] bufferDecimal = null; // Aquí guardamos YIQ, HSV o HSI
+    private String formatoBuffer = "NINGUNO"; //
+
     public Software(){
         this.panel = true;
         this.hayResult = false;
@@ -211,6 +215,22 @@ public class Software extends JFrame{
     }
     public boolean getHayResult(){
         return this.hayResult;
+    }
+    // --- MÉTODOS PARA MANEJO DE BUFFER (PRÁCTICA 2) ---
+    public double[] getBufferDecimal() {
+        return this.bufferDecimal;
+    }
+
+    public void setBufferDecimal(double[] buffer) {
+        this.bufferDecimal = buffer;
+    }
+
+    public String getFormatoBuffer() {
+        return this.formatoBuffer;
+    }
+
+    public void setFormatoBuffer(String formato) {
+        this.formatoBuffer = formato;
     }
 
 }

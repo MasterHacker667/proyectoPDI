@@ -32,6 +32,23 @@ public class TransformationPanels extends JPanel {
         JButton btnContraste = new JButton("Contraste");
         //JButton punto 2 de practica 2.
         JButton btnpunto22 = new JButton("Realizar transoformacion a color de grises");
+        JButton btnpuntoRGBaYIQ = new JButton("RGB a YIQ");
+        JButton btnpuntoYIQaRGB = new JButton("YIQ a RGB");
+        JButton btnpuntoRGBaHSV = new JButton("RGB a HSV");
+        JButton btnpuntoYIQaHSV = new JButton("YIQ a HSV");
+        JButton btnpuntoHSVaYIQ = new JButton("HSV a YIQ");
+        JButton btnpuntoHSVaRGB = new JButton("HSV a RGB");
+        JButton btnpuntoRGBaHSI = new JButton("RGB a HSI");
+        JButton btnpuntoHSIaRGB = new JButton("HSI a RGB");
+        JButton btnpuntoYIQaHSI = new JButton("YIQ a HSI");
+        JButton btnpuntoHSIaYIQ = new JButton("HSI a YIQ");
+        JButton btnpuntoHSVaHSI = new JButton("HSV a HSI");
+        JButton btnpuntoHSIaHSV = new JButton("HSI a HSV");
+
+        // Estos son los que el profe quiere para ver las diferencias reales
+        JButton btnExtraerY = new JButton("Ver Canal Y (Luminancia)");
+        JButton btnExtraerV = new JButton("Ver Canal V (Valor)");
+        JButton btnExtraerI = new JButton("Ver Canal I (Intensidad)");
 
         //JBUtton practica 3:
         JButton btnlab = new JButton("Realizar transformacion lαβ");
@@ -46,7 +63,30 @@ public class TransformationPanels extends JPanel {
         btnpunto22.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnlab.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnlabGris.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // --- ALINEACIÓN AL CENTRO (Añadir después de declarar los botones) ---
 
+// Grupo YIQ
+        btnpuntoRGBaYIQ.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoYIQaRGB.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+// Grupo HSV
+        btnpuntoRGBaHSV.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoYIQaHSV.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoHSVaYIQ.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoHSVaRGB.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+// Grupo HSI
+        btnpuntoRGBaHSI.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoHSIaRGB.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoYIQaHSI.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoHSIaYIQ.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoHSVaHSI.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnpuntoHSIaHSV.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+// Grupo Extracción/Control
+        btnExtraerY.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnExtraerV.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnExtraerI.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         //4. Espacio para cuando querramos dar funcionalidad a los botones
         btnGrises.addActionListener(e -> {
@@ -71,7 +111,34 @@ public class TransformationPanels extends JPanel {
             this.changeImagePanels(6);
         });
 
-        //5. Agregar botones
+        // --- 2. ACTION LISTENERS (LÓGICA DE CONTROL) ---
+
+// --- 2. ACTION LISTENERS (CONECTADOS A CHANGEIMAGEPANELS) ---
+
+// Bloque NTSC (YIQ)
+        btnpuntoRGBaYIQ.addActionListener(e -> this.changeImagePanels(10));
+        btnpuntoYIQaRGB.addActionListener(e -> this.changeImagePanels(11));
+
+// Bloque Perceptual HSV
+        btnpuntoRGBaHSV.addActionListener(e -> this.changeImagePanels(12));
+        btnpuntoHSVaRGB.addActionListener(e -> this.changeImagePanels(13));
+
+// Bloque Perceptual HSI
+        btnpuntoRGBaHSI.addActionListener(e -> this.changeImagePanels(14));
+        btnpuntoHSIaRGB.addActionListener(e -> this.changeImagePanels(15));
+
+// "La Trampa" (Conversiones Cruzadas)
+        btnpuntoYIQaHSV.addActionListener(e -> this.changeImagePanels(20));
+        btnpuntoHSVaYIQ.addActionListener(e -> this.changeImagePanels(21));
+        btnpuntoYIQaHSI.addActionListener(e -> this.changeImagePanels(22));
+        btnpuntoHSIaYIQ.addActionListener(e -> this.changeImagePanels(23));
+        btnpuntoHSVaHSI.addActionListener(e -> this.changeImagePanels(24));
+        btnpuntoHSIaHSV.addActionListener(e -> this.changeImagePanels(25));
+
+// Bloque de Extracción de Canales
+        btnExtraerY.addActionListener(e -> this.changeImagePanels(30));
+        btnExtraerV.addActionListener(e -> this.changeImagePanels(31));
+        btnExtraerI.addActionListener(e -> this.changeImagePanels(32));        //5. Agregar botones
         this.add(btnGrises);
         this.add(Box.createRigidArea(new Dimension(0, 20))); // Espacio de 20px
         this.add(brilloContainer);
@@ -85,82 +152,443 @@ public class TransformationPanels extends JPanel {
         this.add(Box.createRigidArea(new Dimension(0, 20)));
         this.add(btnlabGris);
         this.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        this.add(new JLabel("--- MODELO YIQ (NTSC) ---"));
+        this.add(btnpuntoRGBaYIQ);
+        this.add(btnpuntoYIQaRGB);
+        this.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        this.add(new JLabel("--- MODELO HSV ---"));
+        this.add(btnpuntoRGBaHSV);
+        this.add(btnpuntoHSVaRGB);
+        this.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        this.add(new JLabel("--- MODELO HSI ---"));
+        this.add(btnpuntoRGBaHSI);
+        this.add(btnpuntoHSIaRGB);
+        this.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        this.add(new JLabel("--- CONVERSIONES CRUZADAS ---"));
+        this.add(btnpuntoYIQaHSV);
+        this.add(btnpuntoHSVaYIQ);
+        this.add(btnpuntoYIQaHSI);
+        this.add(btnpuntoHSIaYIQ);
+        this.add(btnpuntoHSVaHSI);
+        this.add(btnpuntoHSIaHSV);
+        this.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        this.add(new JLabel("--- VISUALIZACIÓN DE CANALES ---"));
+        this.add(btnExtraerY);
+        this.add(btnExtraerV);
+        this.add(btnExtraerI);
+        this.add(Box.createRigidArea(new Dimension(0, 10)));
     }
 
-    public void changeImagePanels(int opc){
-        if(this.padre.gethayImagen()){
-            if(this.padre.getPanel()){
-                //Codigo para cambiar la imagen original y poner el resultado en result
-                if(opc == 1) this.escalaGrises(this.padre.getImagenOriginal());
-                if(opc == 2) this.brilloMas(this.padre.getImagenOriginal(), true);
-                if(opc == 3) this.brilloMas(this.padre.getImagenOriginal(), false);
-                if(opc==4) this.transoformacion22(this.padre.getImagenOriginal());
-                if(opc == 5) this.transformacioneslab(this.padre.getImagenOriginal());
-                if(opc == 6) {
-                    if(this.bufferLMSP3 != null){
-                        String[] canales = {"Canal l (Luminosidad)", "Canal α (Amarillo-Azul)", "Canal β (Rojo-Verde)"};
-                        int seleccion = javax.swing.JOptionPane.showOptionDialog(
-                                null,
-                                "Selecciona el canal que deseas visualizar en escala de grises:",
-                                "Punto 4: Extracción de Canales Perceptuales",
-                                javax.swing.JOptionPane.DEFAULT_OPTION,
-                                javax.swing.JOptionPane.PLAIN_MESSAGE,
-                                null,
-                                canales,
-                                canales[0]
-                        );
-                        if (seleccion != -1) {
-                            // seleccion será: 0 para l, 1 para alpha, 2 para beta
-                            this.extraerCanalGrisLab(this.padre.getImagenOriginal(), this.bufferLMSP3, seleccion);
-                        }else{
-                            this.extraerCanalGrisLab(this.padre.getImagenOriginal(), this.bufferLMSP3, 0);
-                        }
-
-                    }else{
-                        JOptionPane.showMessageDialog(this, "Buffer vacio. Debes presionarl el boton de arriba primero");
-                    }
-
-                }
-
-            } else if(!this.padre.getHayResult()){
-                JOptionPane.showMessageDialog(this, "No hay ninguna imagen Result para hacer esta operacion");
-            }else{
-                //Codigo para cambiar la result y reemplazarlo por un result nuevo
-                if(opc == 1) this.escalaGrises(this.padre.getImagenResult());
-                if(opc == 2) this.brilloMas(this.padre.getImagenResult(), true);
-                if(opc == 3) this.brilloMas(this.padre.getImagenResult(), false);
-                if(opc == 4) this.transoformacion22(this.padre.getImagenResult());
-                if(opc == 5) this.transformacioneslab(this.padre.getImagenResult());
-                if(opc == 6){
-                    if(this.bufferLMSP3 != null){
-                        String[] canales = {"Canal l (Luminosidad)", "Canal α (Amarillo-Azul)", "Canal β (Rojo-Verde)"};
-                        int seleccion = javax.swing.JOptionPane.showOptionDialog(
-                                null,
-                                "Selecciona el canal que deseas visualizar en escala de grises:",
-                                "Punto 4: Extracción de Canales Perceptuales",
-                                javax.swing.JOptionPane.DEFAULT_OPTION,
-                                javax.swing.JOptionPane.PLAIN_MESSAGE,
-                                null,
-                                canales,
-                                canales[0]
-                        );
-                        if (seleccion != -1) {
-                            // seleccion será: 0 para l, 1 para alpha, 2 para beta
-                            this.extraerCanalGrisLab(this.padre.getImagenResult(), this.bufferLMSP3, seleccion);
-                        }else{
-                            this.extraerCanalGrisLab(this.padre.getImagenResult(), this.bufferLMSP3, 0);
-                        }
-
-                    }else{
-                        JOptionPane.showMessageDialog(this, "Buffer vacio. Debes presionarl el boton de arriba primero");
-                    }
-                }
-            }
-        }else{
+    public void changeImagePanels(int opc) {
+        if (!this.padre.gethayImagen()) {
             JOptionPane.showMessageDialog(this, "No hay imagenes para trabajar");
+            return;
         }
 
+        // Determinamos la fuente (Original o Result)
+        Imagen imgAProcesar = this.padre.getPanel() ? this.padre.getImagenOriginal() : this.padre.getImagenResult();
+
+        if (!this.padre.getPanel() && !this.padre.getHayResult()) {
+            JOptionPane.showMessageDialog(this, "No hay ninguna imagen Result para hacer esta operacion");
+            return;
+        }
+
+        switch (opc) {
+            case 1: this.escalaGrises(imgAProcesar); break;
+            case 2: this.brilloMas(imgAProcesar, true); break;
+            case 3: this.brilloMas(imgAProcesar, false); break;
+            case 4: this.transoformacion22(imgAProcesar); break;
+            case 5: this.transformacioneslab(imgAProcesar); break;
+
+            case 6: // EL CASO ESPECIAL (LAB)
+                if (this.bufferLMSP3 != null) {
+                    String[] canales = {"Canal l (Luminosidad)", "Canal α (Amarillo-Azul)", "Canal β (Rojo-Verde)"};
+                    int seleccion = JOptionPane.showOptionDialog(null,
+                            "Selecciona el canal Lab a visualizar:", "Punto 4: Lab",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, canales, canales[0]);
+
+                    this.extraerCanalGrisLab(imgAProcesar, this.bufferLMSP3, (seleccion != -1 ? seleccion : 0));
+                } else {
+                    JOptionPane.showMessageDialog(this, "Buffer Lab vacío. Presiona 'Transformación lαβ' primero.");
+                }
+                break;
+
+            // --- PRÁCTICA 2: MODELOS DE COLOR ---
+            case 10: this.procesoRGBaYIQ(imgAProcesar); break;
+            case 11: this.procesoYIQaRGB(imgAProcesar); break;
+            case 12: this.procesoRGBaHSV(imgAProcesar); break;
+            case 13: this.procesoHSVaRGB(imgAProcesar); break;
+            case 14: this.procesoRGBaHSI(imgAProcesar); break;
+            case 15: this.procesoHSIaRGB(imgAProcesar); break;
+            //PROCESOS CRUZADOS (20-25)
+            case 20: this.procesoYIQaHSV(imgAProcesar); break;
+            // --- EXTRACCIONES DE CANALES P2 ---
+            case 30: // Extracción YIQ
+                gestionarExtraccion("YIQ", new String[]{"Y (Luminancia)", "I (Fase)", "Q (Cuadratura)"});
+                break;
+            case 31: // Extracción HSV
+                gestionarExtraccion("HSV", new String[]{"H (Matiz)", "S (Saturación)", "V (Brillo)"});
+                break;
+            case 32: // Extracción HSI
+                gestionarExtraccion("HSI", new String[]{"H (Matiz)", "S (Saturación)", "I (Intensidad)"});
+                break;
+        }
     }
+
+    private void gestionarExtraccion(String modelo, String[] nombresCanales) {
+        // 1. Validación de seguridad: ¿Hay datos de ese modelo en el buffer?
+        if (this.padre.getBufferDecimal() == null || !this.padre.getFormatoBuffer().equals(modelo)) {
+            JOptionPane.showMessageDialog(this, "El buffer no contiene datos de " + modelo + ". Realiza la conversión primero.");
+            return;
+        }
+
+        // 2. Mostrar un diálogo para elegir el canal (0, 1 o 2)
+        int seleccion = JOptionPane.showOptionDialog(
+                this,
+                "Selecciona el canal de " + modelo + " que deseas visualizar en niveles de gris:",
+                "Visualización de Canales - " + modelo,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                nombresCanales,
+                nombresCanales[0]
+        );
+
+        // 3. Si el usuario no cerró la ventana (seleccion != -1), extraemos
+        if (seleccion != -1) {
+            this.extraerCanalGenerico(seleccion, "Canal_" + nombresCanales[seleccion]);
+        }
+    }
+    // --- "LA TRAMPA" (CONVERSIONES CRUZADAS) ---
+
+    // Caso 20: YIQ -> HSV
+    private void procesoYIQaHSV(Imagen img) {
+        this.procesoYIQaRGB(img); // Paso 1: Volver a RGB (resultado queda en padre)
+        if (this.padre.getHayResult()) {
+            this.procesoRGBaHSV(this.padre.getImagenResult()); // Paso 2: De ese RGB a HSV
+        }
+    }
+
+    // Caso 21: HSV -> YIQ
+    private void procesoHSVaYIQ(Imagen img) {
+        this.procesoHSVaRGB(img); // Paso 1: Volver a RGB
+        if (this.padre.getHayResult()) {
+            this.procesoRGBaYIQ(this.padre.getImagenResult()); // Paso 2: De ese RGB a YIQ
+        }
+    }
+
+    // Caso 22: YIQ -> HSI
+    private void procesoYIQaHSI(Imagen img) {
+        this.procesoYIQaRGB(img);
+        if (this.padre.getHayResult()) {
+            this.procesoRGBaHSI(this.padre.getImagenResult());
+        }
+    }
+
+    // Caso 23: HSI -> YIQ
+    private void procesoHSIaYIQ(Imagen img) {
+        this.procesoHSIaRGB(img);
+        if (this.padre.getHayResult()) {
+            this.procesoRGBaYIQ(this.padre.getImagenResult());
+        }
+    }
+
+    // Caso 24: HSV -> HSI
+    private void procesoHSVaHSI(Imagen img) {
+        this.procesoHSVaRGB(img);
+        if (this.padre.getHayResult()) {
+            this.procesoRGBaHSI(this.padre.getImagenResult());
+        }
+    }
+
+    // Caso 25: HSI -> HSV
+    private void procesoHSIaHSV(Imagen img) {
+        this.procesoHSIaRGB(img);
+        if (this.padre.getHayResult()) {
+            this.procesoRGBaHSV(this.padre.getImagenResult());
+        }
+    }
+    private void procesoHSIaRGB(Imagen img) {
+        if (this.padre.getBufferDecimal() == null || !this.padre.getFormatoBuffer().equals("HSI")) {
+            JOptionPane.showMessageDialog(this, "Buffer vacío o no es HSI.");
+            return;
+        }
+
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        double[] buffer = this.padre.getBufferDecimal();
+        byte[] pixelesRGB = new byte[ancho * largo * 3];
+
+        for (int i = 0; i < ancho * largo; i++) {
+            int idxD = i * 3;
+            double h = Math.toRadians(buffer[idxD]);
+            double s = buffer[idxD + 1];
+            double intensity = buffer[idxD + 2];
+
+            double r = 0, g = 0, b = 0;
+
+            // Sector RG (0 <= H < 120°)
+            if (h < 2 * Math.PI / 3) {
+                b = intensity * (1 - s);
+                r = intensity * (1 + (s * Math.cos(h)) / Math.cos(Math.PI / 3 - h));
+                g = 3 * intensity - (r + b);
+            }
+            // Sector GB (120° <= H < 240°)
+            else if (h < 4 * Math.PI / 3) {
+                h = h - 2 * Math.PI / 3;
+                r = intensity * (1 - s);
+                g = intensity * (1 + (s * Math.cos(h)) / Math.cos(Math.PI / 3 - h));
+                b = 3 * intensity - (r + g);
+            }
+            // Sector BR (240° <= H < 360°)
+            else {
+                h = h - 4 * Math.PI / 3;
+                g = intensity * (1 - s);
+                b = intensity * (1 + (s * Math.cos(h)) / Math.cos(Math.PI / 3 - h));
+                r = 3 * intensity - (g + b);
+            }
+
+            pixelesRGB[idxD]     = (byte) Math.max(0, Math.min(255, r * 255));
+            pixelesRGB[idxD + 1] = (byte) Math.max(0, Math.min(255, g * 255));
+            pixelesRGB[idxD + 2] = (byte) Math.max(0, Math.min(255, b * 255));
+        }
+
+        this.padre.setImagenResult(new Imagen(img.getNombreImagen() + "_HSI_to_RGB", 3, ancho, largo, pixelesRGB));
+    }
+
+    private void procesoRGBaHSI(Imagen img) {
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        int numPixeles = ancho * largo;
+        byte[] pixeles = img.getPixelesImagen();
+        int canales = img.getnoCanales();
+
+        double[] buffer = new double[numPixeles * 3];
+
+        for (int i = 0; i < numPixeles; i++) {
+            int idxB = i * canales;
+            int idxD = i * 3;
+
+            double r = (pixeles[idxB] & 0xFF) / 255.0;
+            double g = (pixeles[idxB + 1] & 0xFF) / 255.0;
+            double b = (pixeles[idxB + 2] & 0xFF) / 255.0;
+
+            double num = 0.5 * ((r - g) + (r - b));
+            double den = Math.sqrt(Math.pow(r - g, 2) + (r - b) * (g - b));
+
+            // --- Cálculo de H (Hue) ---
+            double h = 0;
+            if (den != 0) {
+                double theta = Math.acos(num / den);
+                h = (b <= g) ? theta : (2 * Math.PI - theta);
+            }
+            h = Math.toDegrees(h); // Pasamos a grados [0, 360]
+
+            // --- Cálculo de I (Intensity) ---
+            double intensity = (r + g + b) / 3.0;
+
+            // --- Cálculo de S (Saturation) ---
+            double s = 0;
+            if (intensity > 0) {
+                s = 1 - (Math.min(r, Math.min(g, b)) / intensity);
+            }
+
+            buffer[idxD] = h;
+            buffer[idxD + 1] = s;
+            buffer[idxD + 2] = intensity;
+        }
+
+        this.padre.setBufferDecimal(buffer);
+        this.padre.setFormatoBuffer("HSI");
+
+        // Mostramos el canal I (Intensidad)
+        this.extraerCanalGenerico(2, "Canal_I_Intensity");
+    }
+
+    private void procesoHSVaRGB(Imagen img) {
+        if (this.padre.getBufferDecimal() == null || !this.padre.getFormatoBuffer().equals("HSV")) {
+            JOptionPane.showMessageDialog(this, "No hay datos HSV en el buffer.");
+            return;
+        }
+
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        double[] buffer = this.padre.getBufferDecimal();
+        byte[] pixelesRGB = new byte[ancho * largo * 3];
+
+        for (int i = 0; i < ancho * largo; i++) {
+            int idxD = i * 3;
+            double h = buffer[idxD];
+            double s = buffer[idxD + 1];
+            double v = buffer[idxD + 2];
+
+            double c = v * s;
+            double x = c * (1 - Math.abs((h / 60.0) % 2 - 1));
+            double m = v - c;
+
+            double r = 0, g = 0, b = 0;
+
+            if (h < 60)      { r = c; g = x; b = 0; }
+            else if (h < 120) { r = x; g = c; b = 0; }
+            else if (h < 180) { r = 0; g = c; b = x; }
+            else if (h < 240) { r = 0; g = x; b = c; }
+            else if (h < 300) { r = x; g = 0; b = c; }
+            else             { r = c; g = 0; b = x; }
+
+            pixelesRGB[idxD]     = (byte) ((r + m) * 255);
+            pixelesRGB[idxD + 1] = (byte) ((g + m) * 255);
+            pixelesRGB[idxD + 2] = (byte) ((b + m) * 255);
+        }
+
+        this.padre.setImagenResult(new Imagen(img.getNombreImagen() + "_HSV_to_RGB", 3, ancho, largo, pixelesRGB));
+    }
+
+    private void procesoRGBaHSV(Imagen img) {
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        int numPixeles = ancho * largo;
+        byte[] pixeles = img.getPixelesImagen();
+        int canales = img.getnoCanales();
+
+        double[] buffer = new double[numPixeles * 3];
+
+        for (int i = 0; i < numPixeles; i++) {
+            int idxB = i * canales;
+            int idxD = i * 3;
+
+            // Normalizamos RGB a [0, 1] para facilitar el cálculo
+            double r = (pixeles[idxB] & 0xFF) / 255.0;
+            double g = (pixeles[idxB + 1] & 0xFF) / 255.0;
+            double b = (pixeles[idxB + 2] & 0xFF) / 255.0;
+
+            double max = Math.max(r, Math.max(g, b));
+            double min = Math.min(r, Math.min(g, b));
+            double delta = max - min;
+
+            double h = 0, s, v;
+
+            // --- Cálculo de H (Hue/Matiz) ---
+            if (delta == 0) {
+                h = 0;
+            } else if (max == r) {
+                h = 60 * (((g - b) / delta) % 6);
+            } else if (max == g) {
+                h = 60 * (((b - r) / delta) + 2);
+            } else if (max == b) {
+                h = 60 * (((r - g) / delta) + 4);
+            }
+            if (h < 0) h += 360;
+
+            // --- Cálculo de S (Saturation) ---
+            s = (max == 0) ? 0 : (delta / max);
+
+            // --- Cálculo de V (Value/Brillo) ---
+            v = max;
+
+            // Guardamos (H en grados, S y V en [0, 1])
+            buffer[idxD] = h;
+            buffer[idxD + 1] = s;
+            buffer[idxD + 2] = v;
+        }
+
+        this.padre.setBufferDecimal(buffer);
+        this.padre.setFormatoBuffer("HSV");
+
+        // Mostramos el canal V (Brillo) para ver algo en el panel de resultados
+        // Como V está en [0, 1], multiplicamos por 255 en extraerCanalGenerico
+        this.extraerCanalGenerico(2, "Canal_V_Value");
+    }
+
+    protected void procesoYIQaRGB(Imagen img) {
+        if (this.padre.getBufferDecimal() == null || !this.padre.getFormatoBuffer().equals("YIQ")) {
+            JOptionPane.showMessageDialog(this, "No hay datos YIQ válidos.");
+            return;
+        }
+
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        double[] buffer = this.padre.getBufferDecimal();
+        byte[] pixelesRGB = new byte[ancho * largo * 3];
+
+        for (int i = 0; i < ancho * largo; i++) {
+            int idxD = i * 3;
+            double y = buffer[idxD];
+            double ii = buffer[idxD + 1];
+            double q = buffer[idxD + 2];
+
+            // Matriz YIQ -> RGB
+            int r = (int) (1.0 * y + 0.956 * ii + 0.621 * q);
+            int g = (int) (1.0 * y - 0.272 * ii - 0.647 * q);
+            int b = (int) (1.0 * y - 1.106 * ii + 1.703 * q);
+
+            pixelesRGB[idxD]     = (byte) Math.max(0, Math.min(255, r));
+            pixelesRGB[idxD + 1] = (byte) Math.max(0, Math.min(255, g));
+            pixelesRGB[idxD + 2] = (byte) Math.max(0, Math.min(255, b));
+        }
+        this.padre.setImagenResult(new Imagen(img.getNombreImagen() + "_RegresoRGB", 3, ancho, largo, pixelesRGB));
+    }
+
+    protected void procesoRGBaYIQ(Imagen img) {
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        int numPixeles = ancho * largo;
+        byte[] pixeles = img.getPixelesImagen();
+        int canales = img.getnoCanales();
+
+        double[] buffer = new double[numPixeles * 3];
+
+        for (int i = 0; i < numPixeles; i++) {
+            int idxB = i * canales;
+            int idxD = i * 3;
+
+            double r = (pixeles[idxB] & 0xFF);
+            double g = (pixeles[idxB + 1] & 0xFF);
+            double b = (pixeles[idxB + 2] & 0xFF);
+
+            // Matriz RGB -> YIQ
+            buffer[idxD]     = 0.299 * r + 0.587 * g + 0.114 * b; // Y
+            buffer[idxD + 1] = 0.596 * r - 0.274 * g - 0.322 * b; // I
+            buffer[idxD + 2] = 0.211 * r - 0.523 * g + 0.312 * b; // Q
+        }
+
+        this.padre.setBufferDecimal(buffer);
+        this.padre.setFormatoBuffer("YIQ");
+        this.extraerCanalGenerico(0, "Canal_Y_Luminancia");
+    }
+
+    private void extraerCanalGenerico(int canal, String nombre) {
+        if (this.padre.getBufferDecimal() == null) return;
+
+        double[] buffer = this.padre.getBufferDecimal();
+        String modelo = this.padre.getFormatoBuffer();
+        int ancho = this.padre.getImagenOriginal().getAnchoLargo()[0];
+        int largo = this.padre.getImagenOriginal().getAnchoLargo()[1];
+        byte[] gris = new byte[ancho * largo * 3];
+
+        for (int i = 0; i < ancho * largo; i++) {
+            int idxD = i * 3;
+            double val = buffer[idxD + canal];
+            double visual = 0;
+
+            if (modelo.equals("YIQ")) {
+                visual = (canal == 0) ? val : val + 128;
+            }
+            else if (modelo.equals("HSV") || modelo.equals("HSI")) {
+                if (canal == 0) visual = (val / 360.0) * 255; // Hue: de 360° a 255
+                else visual = val * 255;                      // S, V, I: de [0,1] a 255
+            }
+
+            byte b = (byte) Math.max(0, Math.min(255, (int) visual));
+            gris[idxD] = gris[idxD + 1] = gris[idxD + 2] = b;
+        }
+        this.padre.setImagenResult(new Imagen(nombre, 3, ancho, largo, gris));
+    }
+
     public void extraerCanalGrisLab(Imagen img, double[] bufferLAB, int tipoCanal) {
         // 1. Preparación de dimensiones
         int ancho = img.getAnchoLargo()[0];
