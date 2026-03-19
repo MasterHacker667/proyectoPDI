@@ -330,6 +330,7 @@ public class TransformationPanels extends JPanel {
         for (JButton btn : botonesRuidoOriginales) {
             panelSeccionRuido.add(btn);
         }
+
         panelSeccionRuido.revalidate();
         panelSeccionRuido.repaint();
     }
