@@ -11,10 +11,18 @@ public class TransformationPanels extends JPanel {
     private Software padre;
     private grafficWindow graffic;
     private double[] bufferLMSP3;
+
+    //Para el ruido
+    private JPanel panelSeccionRuido;
+    private JButton[] botonesRuidoOriginales;
     public TransformationPanels(Software padre){
         this.padre = padre;
         this.graffic = new grafficWindow();
         this.bufferLMSP3 = null;
+        //Ruido
+        this.panelSeccionRuido = new JPanel(new GridLayout(0, 1, 5, 5));
+        this.panelSeccionRuido.setBorder(BorderFactory.createTitledBorder("Laboratorio de Ruido"));
+
         // 1. Configuración del Layout (Vertical como en Figma)
         // Usamos BoxLayout para apilar componentes en el eje Y
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -54,7 +62,26 @@ public class TransformationPanels extends JPanel {
         JButton btnlab = new JButton("Realizar transformacion lαβ");
         JButton btnlabGris = new JButton("Extraer los canales en niveles de gris");
 
-
+        //Botones para el ruido:
+        // Creamos los botones originales
+        JButton btnSalPimienta = new JButton("Ruido sal y Pimienta");
+        JButton btnGaussiano = new JButton("Ruido Gaussiano");
+        JButton btnUniforme = new JButton("Ruido Uniforme");
+        JButton btnRayleigh = new JButton("Ruido Rayleigh");
+        JButton btnExponencial = new JButton("Ruido Exponencial");
+        JButton btnErlang_Gamma = new JButton("Erlang/Gamma");
+        this.botonesRuidoOriginales = new JButton[]{
+                btnSalPimienta,
+                btnGaussiano,
+                btnUniforme,
+                btnRayleigh,
+                btnExponencial,
+                btnErlang_Gamma
+        };
+        // Agregamos los botones al panel de la sección
+        for (JButton btn : botonesRuidoOriginales) {
+            this.panelSeccionRuido.add(btn);
+        }
 
         // 3. Alineación al centro del panel
         btnGrises.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -64,7 +91,13 @@ public class TransformationPanels extends JPanel {
         btnlab.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnlabGris.setAlignmentX(Component.CENTER_ALIGNMENT);
         // --- ALINEACIÓN AL CENTRO (Añadir después de declarar los botones) ---
-
+//Ruido:
+        btnSalPimienta.addActionListener(e -> this.changeImagePanels(33));
+        btnGaussiano.addActionListener(e -> this.changeImagePanels(34));
+        btnUniforme.addActionListener(e -> this.changeImagePanels(35));
+        btnRayleigh.addActionListener(e -> this.changeImagePanels(36));
+        btnExponencial.addActionListener(e -> this.changeImagePanels(37));
+        btnErlang_Gamma.addActionListener(e -> this.changeImagePanels(38));
 // Grupo YIQ
         btnpuntoRGBaYIQ.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnpuntoYIQaRGB.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -182,6 +215,7 @@ public class TransformationPanels extends JPanel {
         this.add(btnExtraerV);
         this.add(btnExtraerI);
         this.add(Box.createRigidArea(new Dimension(0, 10)));
+        this.add(panelSeccionRuido);
     }
 
     public void changeImagePanels(int opc) {
@@ -237,7 +271,183 @@ public class TransformationPanels extends JPanel {
             case 32: // Extracción HSI
                 gestionarExtraccion("HSI", new String[]{"H (Matiz)", "S (Saturación)", "I (Intensidad)"});
                 break;
+            case 33:
+                this.adicionarSP(imgAProcesar);
+                break;
+            case 34:
+                this.adicionarGaussiano(imgAProcesar);
+                break;
+            case 35:
+                this.adicionarUniforme(imgAProcesar);
+                break;
+            case 36:
+                this.adicionarRayleigh(imgAProcesar);
+                break;
+            case 37:
+                this.adicionarExponencial(imgAProcesar);
+                break;
+            case 38:
+                this.acicionarErlang_Gamma(imgAProcesar);
+                break;
+            // ... dentro del switch ...
+            case 50:
+                this.aplicarFiltroMediana(imgAProcesar);
+                this.regresarAModoRuido();
+                break;
+            case 51:
+                this.aplicarFiltroMedia(imgAProcesar);
+                this.regresarAModoRuido();
+                break;
         }
+    }
+
+    private void adicionarSP(Imagen img) {
+        // 8% de densidad: 0.04 sal, 0.04 pimienta
+        aplicarRuidoYCambiarBotones(img, 33, "Sal y Pimienta");
+    }
+
+    private void adicionarGaussiano(Imagen img) {
+        aplicarRuidoYCambiarBotones(img, 34, "Gaussiano");
+    }
+
+    private void adicionarUniforme(Imagen img) {
+        aplicarRuidoYCambiarBotones(img, 35, "Uniforme");
+    }
+
+    private void adicionarRayleigh(Imagen img) {
+        aplicarRuidoYCambiarBotones(img, 36, "Rayleigh");
+    }
+
+    private void adicionarExponencial(Imagen img) {
+        aplicarRuidoYCambiarBotones(img, 37, "Exponencial");
+    }
+
+    private void acicionarErlang_Gamma(Imagen img) {
+        aplicarRuidoYCambiarBotones(img, 38, "Erlang/Gamma");
+    }
+    private void regresarAModoRuido() {
+        panelSeccionRuido.removeAll();
+        for (JButton btn : botonesRuidoOriginales) {
+            panelSeccionRuido.add(btn);
+        }
+        panelSeccionRuido.revalidate();
+        panelSeccionRuido.repaint();
+    }
+    private void aplicarRuidoYCambiarBotones(Imagen img, int tipo, String nombreRuido) {
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        int canales = img.getnoCanales();
+        byte[] pixeles = img.getPixelesImagen().clone();
+        java.util.Random rnd = new java.util.Random();
+
+        // Parámetros de dispersión (puedes ajustarlos para que se vea más o menos ruido)
+        double a = 15.0;
+        double b = 30.0;
+
+        for (int i = 0; i < pixeles.length; i++) {
+            double ruido = 0;
+            double u = rnd.nextDouble();
+
+            switch (tipo) {
+                case 33: // Sal y Pimienta
+                    if (u < 0.08) {
+                        pixeles[i] = (rnd.nextBoolean()) ? (byte)255 : (byte)0;
+                        continue;
+                    }
+                    break;
+                case 34: // Gaussiano
+                    ruido = rnd.nextGaussian() * b + a;
+                    break;
+                case 35: // Uniforme
+                    ruido = a + (b - a) * u;
+                    break;
+                case 36: // Rayleigh
+                    ruido = a + Math.sqrt(-2 * b * Math.log(1 - u));
+                    break;
+                case 37: // Exponencial
+                    ruido = -(1.0 / a) * Math.log(1 - u);
+                    break;
+                case 38: // Erlang (Gamma) para k=2
+                    ruido = -(1.0 / a) * (Math.log(1 - u) + Math.log(1 - rnd.nextDouble()));
+                    break;
+            }
+
+            if (tipo != 33) {
+                int val = (pixeles[i] & 0xFF) + (int)ruido;
+                pixeles[i] = (byte) Math.max(0, Math.min(255, val));
+            }
+        }
+
+        this.padre.setImagenResult(new Imagen(img.getNombreImagen() + "_Ruidosa", canales, ancho, largo, pixeles));
+
+        // Cambiamos la interfaz al modo "Tratamiento"
+        // Caso 50 para S&P (Mediana), Caso 51 para los demás (Media)
+        int casoFiltro = (tipo == 33) ? 50 : 51;
+        this.modoTratamiento(nombreRuido, casoFiltro);
+    }
+    private void modoTratamiento(String nombreRuido, int casoTratamiento) {
+        // 1. Quita los 6 botones de ruido (SP, Gauss, etc.) del panel
+        panelSeccionRuido.removeAll();
+
+        // 2. Crea un botón "temporal" que solo sirve para limpiar
+        JButton btnTratar = new JButton("Tratar Ruido: " + nombreRuido);
+        btnTratar.setBackground(Color.GREEN); // Para que sepa que es la solución
+
+        // 3. Le asignamos qué caso del switch debe ejecutar (50 o 51)
+        btnTratar.addActionListener(e -> this.changeImagePanels(casoTratamiento));
+
+        // 4. Lo ponemos en el panel y "refrescamos" la vista
+        panelSeccionRuido.add(btnTratar);
+        panelSeccionRuido.revalidate(); // Avisa que cambió la estructura
+        panelSeccionRuido.repaint();    // Redibuja el componente
+    }
+    private void aplicarFiltroMediana(Imagen img) {
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        int canales = img.getnoCanales();
+        byte[] original = img.getPixelesImagen();
+        byte[] resultado = new byte[original.length];
+
+        // Ventana 3x3
+        for (int y = 1; y < largo - 1; y++) {
+            for (int x = 1; x < ancho - 1; x++) {
+                for (int c = 0; c < canales; c++) {
+                    int[] ventana = new int[9];
+                    int k = 0;
+                    for (int dy = -1; dy <= 1; dy++) {
+                        for (int dx = -1; dx <= 1; dx++) {
+                            ventana[k++] = original[((y + dy) * ancho + (x + dx)) * canales + c] & 0xFF;
+                        }
+                    }
+                    java.util.Arrays.sort(ventana);
+                    resultado[(y * ancho + x) * canales + c] = (byte) ventana[4];
+                }
+            }
+        }
+        this.padre.setImagenResult(new Imagen("Limpia_Mediana", canales, ancho, largo, resultado));
+    }
+
+    private void aplicarFiltroMedia(Imagen img) {
+        int ancho = img.getAnchoLargo()[0];
+        int largo = img.getAnchoLargo()[1];
+        int canales = img.getnoCanales();
+        byte[] original = img.getPixelesImagen();
+        byte[] resultado = new byte[original.length];
+
+        for (int y = 1; y < largo - 1; y++) {
+            for (int x = 1; x < ancho - 1; x++) {
+                for (int c = 0; c < canales; c++) {
+                    int suma = 0;
+                    for (int dy = -1; dy <= 1; dy++) {
+                        for (int dx = -1; dx <= 1; dx++) {
+                            suma += original[((y + dy) * ancho + (x + dx)) * canales + c] & 0xFF;
+                        }
+                    }
+                    resultado[(y * ancho + x) * canales + c] = (byte) (suma / 9);
+                }
+            }
+        }
+        this.padre.setImagenResult(new Imagen("Limpia_Media", canales, ancho, largo, resultado));
     }
 
     private void gestionarExtraccion(String modelo, String[] nombresCanales) {
