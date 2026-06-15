@@ -358,6 +358,7 @@ public class FiltrosNoLineales_P9 {
             // Comparamos si el píxel cambió en cualquiera de sus canales RGB
             if (pixOrig[i] != pixProc[i]) {
                 pixelesModificados++;
+
             }
         }
 
