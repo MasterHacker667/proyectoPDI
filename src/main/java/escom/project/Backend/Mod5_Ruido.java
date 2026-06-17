@@ -66,7 +66,89 @@ public class Mod5_Ruido {
         }
         return res;
     }
+    //RUIDO SAL binario
+    public Imagen agregarRuidoSalBinario(Imagen img, double densidad) {
+        int ancho = img.getAncho();
+        int alto = img.getAlto();
 
+        // Clonamos la imagen original para no destruirla
+        Imagen res = new Imagen(ancho, alto, img.getTipoActual(), img.getNumCanales());
+        System.arraycopy(img.getPixeles(), 0, res.getPixeles(), 0, img.getPixeles().length);
+
+        java.util.Random rnd = new java.util.Random();
+        int totalPixeles = ancho * alto;
+        int cantidadRuido = (int) (totalPixeles * densidad);
+
+        for (int i = 0; i < cantidadRuido; i++) {
+            // Seleccionamos una posición completamente aleatoria en el arreglo unidimensional
+            int pos = rnd.nextInt(totalPixeles);
+            int alphaOriginal = img.getAlpha(pos);
+
+            // Ruido de Sal = Forzar el píxel a Blanco puro (255, 255, 255)
+            res.setPixel(pos, 255, 255, 255, alphaOriginal);
+        }
+        return res;
+    }
+
+    //RUIDO PIMIENTA
+    public Imagen agregarRuidoPimientaBinario(Imagen img, double densidad) {
+        int ancho = img.getAncho();
+        int alto = img.getAlto();
+
+        // Clonamos la imagen original por seguridad
+        Imagen res = new Imagen(ancho, alto, img.getTipoActual(), img.getNumCanales());
+        System.arraycopy(img.getPixeles(), 0, res.getPixeles(), 0, img.getPixeles().length);
+
+        java.util.Random rnd = new java.util.Random();
+        int totalPixeles = ancho * alto;
+        int cantidadRuido = (int) (totalPixeles * densidad);
+
+        for (int i = 0; i < cantidadRuido; i++) {
+            int pos = rnd.nextInt(totalPixeles);
+            int alphaOriginal = img.getAlpha(pos);
+
+            // Ruido de Pimienta = Forzar el píxel a Negro puro (0, 0, 0)
+            res.setPixel(pos, 0, 0, 0, alphaOriginal);
+        }
+        return res;
+    }
+    public Imagen agregarRuidoSalGris(Imagen img, double densidad) {
+        int ancho = img.getAncho();
+        int alto = img.getAlto();
+        Imagen res = new Imagen(ancho, alto, img.getTipoActual(), img.getNumCanales());
+        System.arraycopy(img.getPixeles(), 0, res.getPixeles(), 0, img.getPixeles().length);
+
+        java.util.Random rnd = new java.util.Random();
+        int totalPixeles = ancho * alto;
+        int cantidadRuido = (int) (totalPixeles * densidad);
+
+        for (int i = 0; i < cantidadRuido; i++) {
+            int pos = rnd.nextInt(totalPixeles);
+            int alphaOriginal = img.getAlpha(pos);
+            // Sal = Punto blanco puro en el espectro gris
+            res.setPixel(pos, 255, 255, 255, alphaOriginal);
+        }
+        return res;
+    }
+
+    public Imagen agregarRuidoPimientaGris(Imagen img, double densidad) {
+        int ancho = img.getAncho();
+        int alto = img.getAlto();
+        Imagen res = new Imagen(ancho, alto, img.getTipoActual(), img.getNumCanales());
+        System.arraycopy(img.getPixeles(), 0, res.getPixeles(), 0, img.getPixeles().length);
+
+        java.util.Random rnd = new java.util.Random();
+        int totalPixeles = ancho * alto;
+        int cantidadRuido = (int) (totalPixeles * densidad);
+
+        for (int i = 0; i < cantidadRuido; i++) {
+            int pos = rnd.nextInt(totalPixeles);
+            int alphaOriginal = img.getAlpha(pos);
+            // Pimienta = Punto negro puro en el espectro gris
+            res.setPixel(pos, 0, 0, 0, alphaOriginal);
+        }
+        return res;
+    }
     //*************************EXTRAS****************************
     private int clamp(int valor) {
         if (valor > 255) return 255;

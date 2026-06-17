@@ -15,12 +15,13 @@ public class MainWin extends JFrame {
     private boolean hayImagenOriginal;
     private Imagen imageResult;
     private boolean hayImagenResult;
-
+    private Imagen ultimaFrecuenciaFourier;
     //COnexiones con otros atributos
     private boolean selectorImagen;
 
     //Auxiliares
     public boolean hayAlgunaImagen;
+    private boolean fourier;
 
     //Kernels originales
     private double[][][] misMatrices = { new double[3][3], new double[5][5], new double[7][7], new double[9][9], new double[11][11] };
@@ -32,6 +33,8 @@ public class MainWin extends JFrame {
         this.hayImagenResult = false;
         this.hayAlgunaImagen = false;
         this.selectorImagen = true;
+        this.ultimaFrecuenciaFourier = null;
+        this.fourier = false;
         setTitle("PDI V2.0");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
@@ -65,6 +68,12 @@ public class MainWin extends JFrame {
         add(this.centro, BorderLayout.CENTER);
         // Aquí iría el resto de tu estructura (el SplitPane y el panel de estadísticas)
         // ...
+    }
+    public boolean getFourier(){
+        return this.fourier;
+    }
+    public void setFourier(boolean a){
+        this.fourier = a;
     }
     public void setImagenOriginal(Imagen image){
         this.imageOriginal = image;
@@ -206,5 +215,13 @@ public class MainWin extends JFrame {
         }
         // Guardamos en la estructura de 4 dimensiones: [tamaño][posición][fila][columna]
         this.bancoSecundario[idxTam][posicion][f][c] = valor;
+    }
+
+    public Imagen getUltimaFrecuenciaFourier() {
+        return ultimaFrecuenciaFourier;
+    }
+
+    public void setUltimaFrecuenciaFourier(Imagen ultimaFrecuenciaFourier) {
+        this.ultimaFrecuenciaFourier = ultimaFrecuenciaFourier;
     }
 }

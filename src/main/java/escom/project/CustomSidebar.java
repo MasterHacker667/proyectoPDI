@@ -22,6 +22,8 @@ public class CustomSidebar extends JPanel {
     private FiltrosPasaBajas filtrospasaBajas;
     private AnalisisEstadisticoP8 analisisEstadisticoP8;
     private FiltrosNoLineales_P9 p9;
+    private MorfologiaMatematica_P10 p10;
+    private TransformadaFourier_P12 p12;
 
     //Auxiliares:
     private int dx, dy;
@@ -41,6 +43,8 @@ public class CustomSidebar extends JPanel {
         this.filtrospasaAltas = new FiltrosPasaAltas();
         this.analisisEstadisticoP8 = new AnalisisEstadisticoP8();
         this.p9 = new FiltrosNoLineales_P9();
+        this.p10 = new MorfologiaMatematica_P10();
+        this.p12 = new TransformadaFourier_P12();
         this.dx = 0;
         this.dy = 0;
         this.gradosRot = 0;
@@ -850,6 +854,82 @@ public class CustomSidebar extends JPanel {
                     }
                 }
                 this.papa.setImagenResult(this.diseccionadorRuido.agregarRuidoSalYPimienta(imagen1, this.densidad));
+            }
+
+        });
+        this.createSidebarButton("Agregar Ruido Sal Binario", e -> {
+            if(this.papa.hayErrores()){
+                Imagen imagen1;
+                if(this.papa.isSelectorImagen()){
+                    //Trabajamos con la imagen Original
+                    imagen1 = this.papa.getImageOriginal();
+                }else{
+                    //Trabajamos con la imagen Result
+                    if(this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                this.papa.setImagenResult(this.diseccionadorRuido.agregarRuidoSalBinario(imagen1, this.densidad));
+            }
+
+        });
+        this.createSidebarButton("Agregar Ruido Pimienta Binario", e -> {
+            if(this.papa.hayErrores()){
+                Imagen imagen1;
+                if(this.papa.isSelectorImagen()){
+                    //Trabajamos con la imagen Original
+                    imagen1 = this.papa.getImageOriginal();
+                }else{
+                    //Trabajamos con la imagen Result
+                    if(this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                this.papa.setImagenResult(this.diseccionadorRuido.agregarRuidoPimientaBinario(imagen1, this.densidad));
+            }
+
+        });
+        this.createSidebarButton("Agregar Ruido Sal Grises", e -> {
+            if(this.papa.hayErrores()){
+                Imagen imagen1;
+                if(this.papa.isSelectorImagen()){
+                    //Trabajamos con la imagen Original
+                    imagen1 = this.papa.getImageOriginal();
+                }else{
+                    //Trabajamos con la imagen Result
+                    if(this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                this.papa.setImagenResult(this.diseccionadorRuido.agregarRuidoSalGris(imagen1, this.densidad));
+            }
+
+        });
+        this.createSidebarButton("Agregar Ruido Pimienta Grises", e -> {
+            if(this.papa.hayErrores()){
+                Imagen imagen1;
+                if(this.papa.isSelectorImagen()){
+                    //Trabajamos con la imagen Original
+                    imagen1 = this.papa.getImageOriginal();
+                }else{
+                    //Trabajamos con la imagen Result
+                    if(this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                this.papa.setImagenResult(this.diseccionadorRuido.agregarRuidoPimientaGris(imagen1, this.densidad));
             }
 
         });
@@ -1671,10 +1751,263 @@ public class CustomSidebar extends JPanel {
                 this.papa.setImagenResult(imagenr);
             }
         });
+        //========================= 0PRACTICA 10 =========================
+        this.container.add(new JSeparator(JSeparator.HORIZONTAL));
+        container.add(new JLabel("Tamaño del Kernel:"));
+        JComboBox<Integer> comboKernel10 = new JComboBox<>(tamañosImpares);
+        container.add(comboKernel10);
+        this.createSidebarButton("Erosionar", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
 
+                this.papa.setImagenResult(this.p10.erosionar(imagen1,  matrizParaLlenar));
+            }
+        });
+
+        this.createSidebarButton("Dilatar", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.dilatar(imagen1,  matrizParaLlenar));
+            }
+        });
+        this.createSidebarButton("Clausura", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.clausura(imagen1,  matrizParaLlenar));
+            }
+
+        });
+        this.createSidebarButton("Apertura", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.apertura(imagen1,  matrizParaLlenar));
+            }
+        });
+        this.createSidebarButton("Esqueletizado", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.esqueletizado(imagen1,  matrizParaLlenar));
+            }
+        });
+        //========================= 0PRACTICA 11 =========================
+        this.container.add(new JSeparator(JSeparator.HORIZONTAL));
+        this.createSidebarButton("Erosion gris", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.erosionarGris(imagen1,  matrizParaLlenar));
+            }
+        });
+        this.createSidebarButton("Dilatacion Gris", e -> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.dilatarGris(imagen1,  matrizParaLlenar));
+            }
+        });
+        this.createSidebarButton("Apertura gris", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.aperturaGris(imagen1,  matrizParaLlenar));
+            }
+        });
+        this.createSidebarButton("Clausura Gris", e-> {
+            if(this.papa.hayErrores()) {
+                Imagen imagen1;
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+                int tamanoReal = (int) comboKernel10.getSelectedItem();
+                double[][] matrizParaLlenar = this.papa.darMatrizDeseada(tamanoReal);
+
+                this.papa.setImagenResult(this.p10.clausuraGris(imagen1,  matrizParaLlenar));
+            }
+        });
+        //Practica 12:
+        JSlider sliderRadioCorte;
+        JLabel lblValorRadio;
+        sliderRadioCorte = new JSlider(JSlider.HORIZONTAL, 10, 150, 45);
+        sliderRadioCorte.setMajorTickSpacing(20);
+        sliderRadioCorte.setPaintTicks(true);
+        sliderRadioCorte.setPaintLabels(true);
+        sliderRadioCorte.setBackground(this.getBackground());
+        lblValorRadio = new JLabel("Frecuencia de Corte (Do): 45");
+        lblValorRadio.setAlignmentX(Component.CENTER_ALIGNMENT);
+        sliderRadioCorte.addChangeListener(e -> {
+            lblValorRadio.setText("Frecuencia de Corte (Do): " + sliderRadioCorte.getValue());
+        });
+        this.container.add(sliderRadioCorte);
+        this.createSidebarButton("Filtrar en Frecuencia", e -> {
+            // Verificar si el sistema de la app reporta un estado correcto/errores
+            if (this.papa.hayErrores()) {
+                Imagen imagen1;
+
+                // Determinar si procesamos la original o un resultado de un paso previo
+                if (this.papa.isSelectorImagen()) {
+                    imagen1 = this.papa.getImageOriginal();
+                } else {
+                    if (this.papa.getHayIMagenResult()) {
+                        imagen1 = this.papa.getImageResult();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No hay imagen result disponible");
+                        return;
+                    }
+                }
+
+                // 1. Leer el parámetro de entrada (Radio de corte Do) desde tu JSlider
+                double radioSeleccionado = (double) sliderRadioCorte.getValue();
+
+                // 2. Ejecutar el pipeline completo y actualizar el lienzo de salida a través de this.papa
+                Imagen resultadoFiltrado = this.filtrarCompleto(imagen1, radioSeleccionado, this.papa);
+
+                this.papa.setImagenResult(resultadoFiltrado);
+
+                // Guardamos una copia en tu barra lateral de esta última imagen procesada en frecuencia
+                // para cuando configuremos el botón 2 (Métricas).
+                //thisultimaImagenFrecuencia = resultadoFiltrado;
+                this.papa.setFourier(true);
+                this.papa.setUltimaFrecuenciaFourier(resultadoFiltrado);
+            }
+        });
+        this.container.add(lblValorRadio);
 
     }
+    // =========================================================================
+    // MÉTODO COORDINADOR PARA TU ARQUITECTURA
+    // =========================================================================
+    public Imagen filtrarCompleto(Imagen imgOriginal, double radioCorte, Object ventanaPapa) {
+        // 1. Calcular FFT 2D Directa
+        Complejo[][] espectro = this.p12.calcularFFT2D(imgOriginal);
 
+        // 2. Centrar cuadrantes (Bajas frecuencias al medio)
+        this.p12.intercambiarCuadrantes(espectro);
+
+        // 3. Obtener la magnitud visual del espectro en niveles de gris
+        Imagen imgMagnitud = this.p12.obtenerImagenMagnitud(espectro);
+
+        // [OPCIONAL] Si tu ventana principal (this.papa) tiene un método para mostrar el espectro
+        // en un tercer panel o pestaña, se lo puedes inyectar aquí. Por ejemplo:
+        // ((TuVentanaPrincipalClass) ventanaPapa).setImagenEspectro(imgMagnitud);
+
+        // 4. Aplicar el Filtro Gaussiano Pasa-Bajas sobre la matriz compleja
+        this.p12.aplicarFiltroGaussianoPasaBajas(espectro, radioCorte);
+
+        // 5. Deshacer el centrado (Revertir cuadrantes antes de la inversa)
+        this.p12.intercambiarCuadrantes(espectro);
+
+        // 6. Calcular la FFT 2D Inversa para regresar al espacio/tiempo
+        Imagen imgFiltradaEspacio = this.p12.calcularIFFT2D(espectro, imgOriginal.getTipoActual(), imgOriginal.getNumCanales());
+
+        return imgFiltradaEspacio;
+    }
 
     /*private void agregarBotonesIniciales() {
         String[] botones = {
